@@ -1,15 +1,46 @@
-## Put comments here that give an overall description of what your
-## functions do
+## This R script computes the inverse of a supplied matrix if no cached version of the inverse exists.
+## If the inverse has already been cached then it is pulled from the cache and returned
 
-## Write a short comment describing this function
+## This function creates a special vector, which is a list of the following functions:
+## set the value of the vector
+## get the value of the vector
+## set the value of the matrix inverse
+## get the value of the matrix inverse
+## returns this list of functions
+
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  i <- matrix()
+  setmatrix <- function(y) {
+    x <<- y
+    i <<- matrix() #accounts for when matrix changes
+  }
+  getmatrix <- function() x
+  setinverse <- function(inv) i <<- inv
+  getinverse <- function() i
+  list(setmatrix = setmatrix, getmatrix = getmatrix,
+       setinverse = setinverse,
+       getinverse = getinverse)
 }
 
 
-## Write a short comment describing this function
+## This function computes the inverse of the special matrix returned by makeCacheMatrix above.
+## If the inverse has already been calculated (and the matrix has not changed), then the inverse is retrieved
+## from the cache.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  ## Return a matrix that is the inverse of 'x'
+  i <- x$getinverse()
+  if(!is.na(i[1,1])) {
+    message("Getting cached inverse")
+    return(i)
+  }
+  inputMatrix <- x$getmatrix()
+  i <- solve(inputMatrix)
+  x$setinverse(i)
+  
+  print("Original matrix:")
+  print(inputMatrix)
+  print("Inverse matrix:")
+  return(i)
 }
