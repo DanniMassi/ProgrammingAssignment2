@@ -43,3 +43,4 @@ seeTimes <- function (n = numeric)
   ## Return some funny message
   return ("Do you see the difference? :)")	 
 }
+
